@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Website</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <header>
+    <div id="first">
+      <div class="logo"><span style="font-size: 24px;">2rism</span><img src="icons/Vector.png" alt="icon"
+          style="size: 2px;"></div>
+      <div class="nav">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Hostels</a></li>
+          <li><a href="#">Restaurants</a></li>
+          <li><a href="#">Tours</a></li>
+          <li><a href="#">Destinations</a></li>
+          <li><a href="#">Activities</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Login</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="second">
+      <h1>Discover the most engaging palces</h1>
+      <button>Discver on 3D globe</button>
+    </div>
+    <div id="third">
+      <div>
+        <div>
+          <img src="./icons/location.png" alt="" />
+          <div>
+            <span>Location</span>
+            <div>Explore nearby</div>
+          </div>
+        </div>
+        <div>
+          <img src="./icons/activities.png" alt="" />
+          <div>
+            <span>Activities</span>
+            <div>All Activities</div>
+          </div>
+        </div>
+        <div>
+          <img src="./icons/calendar.png" alt="" />
+          <div>
+            <span>When</span>
+            <div>Choose a Date</div>
+          </div>
+        </div>
+        <div>
+          <img src="./icons/guest.png" alt="" />
+          <div>
+            <span>Guests</span>
+            <div>I guest</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <h2 style="text-align: center; margin-top: 20px;">Trip Plan </h2>
+  <form action="#" method="post" onsubmit="return validateForm()">
+    <table>
+      <tr>
+        <td>Name:</td>
+        <td><input type="text" name="name" required><span class="error-message"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Address:</td>
+        <td><input type="text" name="address" required><span class="error-message"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Town/City:</td>
+        <td><input type="text" name="city" required><span class="error-message"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Postcode:</td>
+        <td><input type="text" name="postcode" required><span class="error-message"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>No. of days:</td>
+        <td>
+          <input type="radio" name="days" value="2" required>2 days
+          <input type="radio" name="days" value="4" required>4 days
+          <input type="radio" name="days" value="7" required>7 days
+          <span class="error-message"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Persons:</td>
+        <td>
+          <input type="radio" name="persons" value="1" required>One
+          <input type="radio" name="persons" value="2" required>Two
+          <input type="radio" name="persons" value="4" required>Four
+          <span class="error-message"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Departure time:</td>
+        <td><input type="time" name="departure_time" required><span class="error-message"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Any instructions:</td>
+        <td><textarea name="instructions" required></textarea><span class="error-message"></span>
+        </td>
+      </tr>
+      <tr>
+        <td>Service type:</td>
+        <td>
+          <input type="checkbox" name="service_type[]" value="Economy">Economy
+          <input type="checkbox" name="service_type[]" value="Business">Business
+          <input type="checkbox" name="service_type[]" value="Executive">Executive
+          <span class="error-message"></span>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:center;"><input type="submit" value="Submit Order"></td>
+      </tr>
+    </table>
+  </form>
+
+  <footer>
+    <table>
+      <tr>
+        <td>
+          <p>We always make our customers happy by providing as many choices as possible</p>
+        </td>
+        <td>
+          <ul>
+            <li>
+              <h1>About</h1>
+            </li>
+            <li>About us</li>
+            <li>Features</li>
+            <li>News</li>
+            <li>Menu</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>
+              <h1>Company</h1>
+            </li>
+            <li>why 2rism</li>
+            <li>Partner with us</li>
+            <li>FAQ</li>
+            <li>Blog</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>
+              <h1>Support</h1>
+            </li>
+            <li>Account</li>
+            <li>Support</li>
+            <li>Feedback</li>
+            <li>Contact us</li>
+          </ul>
+        </td>
+        <td>
+          <h1>Subscribe on our Destinations review Newsteller</h1>
+          <input type="email" name="" id="" placeholder="Your Email exp-abc@gmail.com">
+        </td>
+      </tr>
+    </table>
+  </footer>
+  <script src="script.js"></script>
+</body>
+
+</html>
