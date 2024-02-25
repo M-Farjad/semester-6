@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-os.chdir(r'E:\BS Teaching\Fall 2023\IDS\PyProgs\CSV_Files')
+os.chdir(r'D:\Study Material\semester-6\IDS\Code')
 data = pd.read_csv("LinearRegression.csv")
 print(data.head())
 x_val = data['x']

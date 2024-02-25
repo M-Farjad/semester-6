@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 
-os.chdir(r'E:\BS Teaching\Fall2022\IDS\PyProgs\CSV_Files')
+os.chdir(r'D:\Study Material\semester-6\IDS\Code')
 data = pd.read_csv("SalesData.csv")
 # print(data.head())
 # print(data.columns)

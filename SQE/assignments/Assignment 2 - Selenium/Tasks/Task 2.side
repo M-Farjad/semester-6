@@ -1,0 +1,170 @@
+{
+  "id": "4d1a17f5-65ef-4fe1-b9cc-571a6072f6f6",
+  "version": "2.0",
+  "name": "Calculator Test",
+  "url": "https://www.google.com/",
+  "tests": [{
+    "id": "49a2f1e5-0e33-4882-8d8d-d21c385799b7",
+    "name": "Test Addition",
+    "commands": [{
+      "id": "e5e4df3f-1a0b-4d22-963b-15a72bde3dd4",
+      "comment": "",
+      "command": "open",
+      "target": "https://www.google.com/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "be7ffad3-18e0-4ba5-855f-6660d95f8358",
+      "comment": "",
+      "command": "type",
+      "target": "name=q",
+      "targets": [],
+      "value": "5+10"
+    }, {
+      "id": "ac8cb15c-c9eb-464d-8a07-4f05f2b4adab",
+      "comment": "",
+      "command": "submit",
+      "target": "name=q",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1d8b8265-dca4-4c89-a0ef-08c3c81cc5f1",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=cwos",
+      "targets": [
+        ["id=cwos", "id"],
+        ["css=#cwos", "css:finder"],
+        ["xpath=//span[@id='cwos']", "xpath:attributes"],
+        ["xpath=//div[@id='rso']/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/span", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/div/span", "xpath:position"],
+        ["xpath=//span[contains(.,'15')]", "xpath:innerText"]
+      ],
+      "value": "15"
+    }]
+  }, {
+    "id": "1af7462d-115a-45a4-a0d0-fc8f46a420d4",
+    "name": "Test Subtraction",
+    "commands": [{
+      "id": "3ec184d4-3546-4b17-b356-2051b2a3050d",
+      "comment": "",
+      "command": "open",
+      "target": "https://www.google.com/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "69a86cb3-ba01-4fc3-88a1-5870a5b87e5a",
+      "comment": "",
+      "command": "type",
+      "target": "name=q",
+      "targets": [],
+      "value": "10-5"
+    }, {
+      "id": "4a59343b-68d2-4085-b0a3-cfc15d4e013f",
+      "comment": "",
+      "command": "submit",
+      "target": "name=q",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4a1d9420-330d-4d82-80db-60fc6d4d9d2c",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=cwos",
+      "targets": [
+        ["id=cwos", "id"],
+        ["css=#cwos", "css:finder"],
+        ["xpath=//span[@id='cwos']", "xpath:attributes"],
+        ["xpath=//div[@id='rso']/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/span", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/div/span", "xpath:position"]
+      ],
+      "value": "5"
+    }]
+  }, {
+    "id": "7d54c932-08a9-4e43-ba8c-3dfe1488622d",
+    "name": "Test Multiplication",
+    "commands": [{
+      "id": "10a3462b-eef9-4b8a-8e5a-65092baf0bd8",
+      "comment": "",
+      "command": "open",
+      "target": "https://www.google.com/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "52dd4b8a-9af0-40c7-b2c4-27e3ab17df29",
+      "comment": "",
+      "command": "type",
+      "target": "name=q",
+      "targets": [],
+      "value": "10*5"
+    }, {
+      "id": "0d72a68a-05e3-4305-bd6f-12de9c899142",
+      "comment": "",
+      "command": "submit",
+      "target": "name=q",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6c1c2bc9-41e8-48ab-91cc-59fe012b1c48",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=cwos",
+      "targets": [
+        ["id=cwos", "id"],
+        ["css=#cwos", "css:finder"],
+        ["xpath=//span[@id='cwos']", "xpath:attributes"],
+        ["xpath=//div[@id='rso']/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/span", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/div/span", "xpath:position"]
+      ],
+      "value": "50"
+    }]
+  }, {
+    "id": "77915a8f-bf11-42f2-84f4-263e16a9dfb1",
+    "name": "Test Division",
+    "commands": [{
+      "id": "b8781c1d-3c87-4ee3-a141-2b2b4f78a1b3",
+      "comment": "",
+      "command": "open",
+      "target": "https://www.google.com/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ab78cc79-ebc9-4724-a750-05eef7f21bb9",
+      "comment": "",
+      "command": "type",
+      "target": "name=q",
+      "targets": [],
+      "value": "10/5"
+    }, {
+      "id": "dcf0561d-dc68-4ec4-b185-3ea9e5d62d5a",
+      "comment": "",
+      "command": "submit",
+      "target": "name=q",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1c5d1f15-73d8-4b0d-b6d9-e5e0291e1473",
+      "comment": "",
+      "command": "assertText",
+      "target": "id=cwos",
+      "targets": [
+        ["id=cwos", "id"],
+        ["css=#cwos", "css:finder"],
+        ["xpath=//span[@id='cwos']", "xpath:attributes"],
+        ["xpath=//div[@id='rso']/div/div/div/div/div/div/div/div/div[2]/div[2]/div/div/span", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/div/span", "xpath:position"]
+      ],
+      "value": "2"
+    }]
+  }],
+  "suites": [{
+    "id": "6e94ccff-cc1d-45d8-951c-e8a62e2e31de",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["49a2f1e5-0e33-4882-8d8d-d21c385799b7", "1af7462d-115a-45a4-a0d0-fc8f46a420d4", "7d54c932-08a9-4e43-ba8c-3dfe1488622d", "77915a8f-bf11-42f2-84f4-263e16a9dfb1"]
+  }],
+  "urls": ["https://www.google.com/"],
+  "plugins": []
+}

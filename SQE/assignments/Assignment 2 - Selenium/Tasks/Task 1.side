@@ -1,0 +1,103 @@
+{
+  "id": "61a39da2-da71-4777-9242-6f17bb044751",
+  "version": "2.0",
+  "name": "Task 1",
+  "url": "https://www.google.com/",
+  "tests": [{
+    "id": "146120a8-51c3-43bf-844e-a1908a5ea577",
+    "name": "T1: current Dollar Rate",
+    "commands": [{
+      "id": "13e48f1f-9bce-4573-866b-7dccdc06513e",
+      "comment": "",
+      "command": "open",
+      "target": "https://www.google.com/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9a5151d8-8e45-4892-ae67-25b660eeec96",
+      "comment": "",
+      "command": "type",
+      "target": "name=q",
+      "targets": [],
+      "value": "current dollar rate"
+    }, {
+      "id": "b958771a-5e1f-4321-9037-d09b735d65b1",
+      "comment": "",
+      "command": "submit",
+      "target": "name=q",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "442fae18-aaff-4513-b646-7ebc9d545345",
+      "comment": "",
+      "command": "click",
+      "target": "css=.SwHCTb",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8254de74-f3d6-446f-9d2b-653a36dc6e2e",
+      "comment": "",
+      "command": "storeText",
+      "target": "css=.SwHCTb",
+      "targets": [
+        ["css=.SwHCTb", "css:finder"],
+        ["xpath=//div[@id='knowledge-currency__updatable-data-column']/div/div[2]/span", "xpath:idRelative"],
+        ["xpath=//div/div/div/div[3]/div/div/div[2]/span", "xpath:position"],
+        ["xpath=//span[contains(.,'279.13')]", "xpath:innerText"]
+      ],
+      "value": "dollarRate"
+    }, {
+      "id": "18d3fa96-51f8-4fd7-b9f5-afe7abbf8ee5",
+      "comment": "",
+      "command": "if",
+      "target": "${dollarRate}<260",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2448b40e-a890-4a68-bb1d-17abea755a99",
+      "comment": "",
+      "command": "echo",
+      "target": "\"congratulations\"",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "90793b9f-5e74-42d6-80d6-01b6cbcf0252",
+      "comment": "",
+      "command": "elseIf",
+      "target": "${dollarRate}>260",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e536b65f-b98e-4b6a-b1fe-91f7ec18c62d",
+      "comment": "",
+      "command": "echo",
+      "target": "\"Oh No\"",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d2256f9e-652f-4449-ad44-eba5da68ff13",
+      "comment": "",
+      "command": "else",
+      "target": "\"No change in the rate\"",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6e5e33f5-7a80-4c13-b87c-541445bff235",
+      "comment": "",
+      "command": "end",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "12817b54-fc04-4d4b-bebb-470464fda157",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["https://www.google.com/"],
+  "plugins": []
+}
