@@ -6,7 +6,7 @@ function myFunction() {
     var myemail = document.getElementById("email").value.trim();
 
 
-    var x = document.getElementById("myDIV");
+    // var x = document.getElementById("myDIV");
     var mypasstext1 = document.getElementById("passtext1");
     var mypasstext2 = document.getElementById("passtext2");
     var myphonetext = document.getElementById("phonetext");
@@ -26,12 +26,16 @@ function myFunction() {
 
     if (mypass1 == "") {
         mypasstext1.style.display = "block";
+    } else if (mypass1.length < 6) {
+        // alert("passwords length must be at least 6");
+        mypasstext1.style.display = "block";
+        mypasstext1.innerHTML = "passwords length must be at least 6";
     }
     else {
         mypasstext1.style.display = "none";
-        if (mypass1.length < 6) {
-            alert("passwords length must be at least 6");
-        }
+        // if (mypass1.length < 6) {
+        //     alert("passwords length must be at least 6");
+        // }
     }
     if (mypass2 == "") {
         mypasstext2.style.display = "block";
@@ -56,6 +60,8 @@ function myFunction() {
     }
     if (myemail == "") {
         myemailtext.style.display = "block";
+        myemailtext.classList.remove("valid");
+        myemailtext.classList.add("invalid");
     }
     else {
         myemailtext.style.display = "none";
@@ -65,6 +71,5 @@ function myFunction() {
             alert("Please enter a valid e-mail address");
             return false;
         }
-
     }
 }

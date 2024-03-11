@@ -57,3 +57,10 @@
     border-bottom: 2px solid red;
     border-radius: 0px;
 }
+
+.valid{
+    border: 2px solid #ccc;
+}
+.invalid{
+    border: 2px solid black;
+}
