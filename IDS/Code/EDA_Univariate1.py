@@ -13,7 +13,7 @@ fig = plt.figure(figsize=(7,8)) # figsize = (4,4) default is 6.4, 4.8
 ax = fig.add_subplot(111)
 ###### PIE PLOT ####################
 values = data['City'].value_counts()
-mylabels = data['City'].uni                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   que()
+mylabels = data['City'].unique()
 # myexplode = [0,0.05,0,0,0,0]
 # mycolors = ["red", "green", "blue"]
 # plt.pie(values, labels=mylabels)
