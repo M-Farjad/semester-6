@@ -1,0 +1,177 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+header {
+    width: 100%;
+    height: 45%;
+}
+
+header img{
+    width: 100%;
+    height: 100%;
+}
+
+main{
+    display: flex;
+}
+
+.main-body{
+    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card span:first-of-type{
+    font-weight: bold;
+    padding: 0.5rem 0;
+}
+
+.card button {
+    margin: 0.3rem 0;
+    border-radius: 10px;
+    padding: 2px 0.5rem;
+}
+
+.last {
+    visibility: hidden;
+}
+
+ul {
+    list-style: none;
+    padding: 3rem 1rem;
+}
+
+li a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+hr {
+    border: 1px solid;
+    margin-top: 2px;
+    margin-bottom: 1.3rem;
+}
+
+.selection h1 {
+    text-align: center;
+}
+
+footer {
+    background-color: rgb(105, 102, 102);
+    color: #ffffff;
+    height: 20%;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 15px;
+}
+
+footer img {
+    margin: 0 8px;
+}
+
+.task2-main-body{
+    display: flex;
+}
+
+.task2-main-body div:last-of-type {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.task2-btn {
+    margin: 30px;
+    padding: 4px 30px;
+    background-color: blue;
+    color: #ffffff;
+    border: 0;
+    border-radius: 5px;
+}
+
+button, a{
+    cursor: pointer;
+}
+
+.task3-main-body {
+    min-width: 65%;
+}
+
+.task3-main-body h1{ 
+    text-align: center;
+    margin: 2rem;
+}
+
+form div {
+    margin: .5rem;
+}
+
+form .form-description {
+    display: inline-block;
+    width: 40%;
+    text-align: right;
+    margin-right: 50px;
+    vertical-align: top;
+}
+
+input, select, textarea {
+    width: 170px;
+}
+
+input[type="radio"] {
+    min-width: none;
+    width: unset;
+}
+
+label[for="male"]{
+    margin-right: 32px;
+}
+
+.task3-btn {
+    background-color: red;
+}
+
+form div:last-of-type {
+    text-align: center;
+}
+
+table{
+    padding: 1rem 3dvh;
+}
+
+/* .header {
+    width: 100%;
+    height: 10%;
+    background-color: red;
+    float: left;
+}
+
+.menu{
+    width: 20%;
+    height: 80%;
+    background-color: blue;
+    float: left;
+}
+
+.body{
+    width: 80%;
+    height: 80%;
+    background-color: black;
+    float: left;
+}
+
+.footer{
+    width: 100%;
+    height: 10%;
+    background-color: pink;
+    float: left;
+} */
