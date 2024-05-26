@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap");
+* {
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  outline: none; border:none;
+}
+
+.show-products .box-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 20rem);
+    justify-content: center;
+    gap:1.5rem;
+    max-width: 1200px;
+    margin:0 auto;
+    align-items: flex-start;
+  }
+  
+  .show-products{
+    padding-top: 0;
+    margin-top: 15px;
+  }
+  
+  .show-products .box-container .box{
+    text-align: center;
+    padding:10px;
+    border-radius: .5rem;
+    border:2px solid rgb(9, 218, 255);
+  }
+  #home .container h2{
+    font-family: 'Comfortaa', cursive;
+    font-weight: bolder;
+  }
+  .show-products .box-container .box img{
+      height: 190px;
+      display: inline-block;
+  
+  }
+  
+  .show-products .box-container .box .name{
+    font-size: 1rem;
+    color:black;
+    text-transform: capitalize;
+  }
+  
+  .show-products .box-container .box .price{
+    margin: 8px 0px;
+    font-size: 17px;
+    color: rgb(3, 180, 224);
+    font-weight: 400;
+  }
+  .show-products .box-container .box .update_btn,.update_btn{
+    background-color: rgb(253, 15, 7);
+    padding: 9px 15px;
+    margin: 6px;
+    border-radius: 10px;
+    color: white;
+    text-transform: capitalize;
+  }
+  .show-products .box-container .box .delete_btn, .delete_btn{
+    background-color: rgb(255, 208, 0);
+    padding: 9px 15px;
+    margin: 6px;
+    border-radius: 10px;
+    color: rgb(255,255, 255);
+    text-transform: capitalize;
+  }
+
+/* details book */
+
+.details{
+  margin-top: 80px;
+   
+}
+.details .row_box{
+  display: flex;
+justify-content: center;
+  align-items: center;
+}
+.details .col_box img{
+  height: 420px;
+}
+.details .col_box{
+  padding: 80px;
+  
+}
+.details .col_box img{
+  padding: 0;
+}
+.details h3{
+  margin: 20px 0;
+  font-size: 22px;
+  font-weight: bold;
+}
+.details label{
+  font-size: 17px;
+  font-weight: 700;
+
+}
+.details input{
+  width: 130px;
+  height: 41px;
+  padding-left: 3px;
+  font-size: 20px;
+  margin-left: 10px;
+  border-radius: 5px;
+  border: 1px solid rgb(0, 240, 248);
+}
+input:focus{
+  outline: none;
+}
+.details .col_box .buttons{
+  display: flex;
+  margin: 12px;
+}
+.details .buttons a{
+  background-color: rgb(6, 144, 236);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 17px;
+  padding: 12px;
+  margin-right: 10px;
+  text-decoration: none;
+}
+/* details book */

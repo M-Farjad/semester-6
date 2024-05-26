@@ -1,0 +1,365 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;700&display=swap');
+
+* {
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+    outline: none; border:none;
+
+    
+  }
+
+  header {
+    background: #f2f1f1;
+    display: flex;
+    justify-content: space-between;
+    top: 0; left: 0; right: 0;
+    padding: 10px 1%;
+    align-items: center;
+    position: sticky;
+    z-index: 1000;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  
+  
+  }
+  
+  .logo a{
+    display: flex;
+    cursor: pointer;
+  }
+  
+  .logo a span {
+    color: rgb(255, 0, 0);
+    font-weight: bold;
+    padding-right: 5px;
+    font-size: 40px;
+  }
+  .logo a .me {
+    color: rgb(0, 0, 0);
+    font-weight: 500;
+  }
+  .nav a {
+    padding: 0.5rem 1rem;
+    color: rgb(9, 152, 248);
+    font-weight: 600;
+    transition: 0.2s ease;
+  }
+  .nav a:hover {
+    color: black;
+    border-bottom: 3px solid rgb(245, 12, 12);
+  }
+  header .right .Btn {
+    color: rgb(236, 6, 6);
+    margin: 0 15px;
+    padding: 5px 3px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s ease;
+  }
+  header .right .Btn:hover {
+    color: black;
+    border-bottom: 3px solid #e6e208;
+  }
+  /* **********Header Close********************* */
+
+  section .banner{
+ background-image: url(../images/imgg.png);
+ background-position: center;
+ background-size: cover;
+ background-repeat: no-repeat;
+ width: auto;
+ height: 144px;
+ margin: 1rem 0;
+ z-index: 1000;
+  }
+
+/* showing books on home page */
+
+.show-products .box-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 17rem);
+    justify-content: center;
+    gap:1.5rem;
+    max-width: 1200px;
+    margin:0 auto;
+    align-items: flex-start;
+  }
+  
+  .show-products{
+    padding-top: 0;
+    margin-top: 55px;
+  }
+  
+  .show-products .box-container .box{
+    text-align: center;
+    padding:10px;
+    border-radius: .5rem;
+    border: 2px solid rgb(9, 218, 255);
+   
+  }
+  #home .container h2{
+    font-family: 'Comfortaa', cursive;
+    font-weight: bolder;
+  }
+  .show-products .box-container .box img{
+      height: 25px;
+      display: inline-block;
+  
+  }
+  
+  .show-products .box-container .box .name{
+    font-size: 1rem;
+    color:black;
+    text-transform: capitalize;
+  }
+  
+  .show-products .box-container .box .price{
+    margin: 8px 0;
+    font-size: 17px;
+    color: #f35516;
+    font-weight: 400;
+  }
+  .show-products .box-container .box .update_btn,.update_btn{
+    padding: 4px 4px;
+    margin: 4px;
+    border-radius: 7px;
+    color: rgb(0, 167, 245);
+    text-transform: capitalize;
+    text-decoration: none;
+  }
+  .show-products .box-container .box .delete_btn, .delete_btn{
+    padding: 5px 5px;
+    margin: 2px;
+  }
+
+  
+/* Scrollbarr */
+::-webkit-scrollbar {
+    width: 6px;
+    
+  }
+  ::-webkit-scrollbar-track {
+    background: #f2f1f1;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(0, 167, 245);
+    width: 5px;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: black;
+  }
+  /* Scrollbarr */
+  
+  
+/* css for Cart Page */
+.cart_form{
+    margin: 20px auto;
+}
+.cart_form table{
+    border-collapse: collapse;
+    width: 100%;
+}
+.book_info{
+display: flex;
+flex-wrap: wrap;
+}
+.cart_form table tr th{
+    text-align: left;
+    padding: 6px;
+    color: #fff;
+    background: rgb(0, 167, 245);
+}
+.cart_form table tr td{
+    padding: 10px 5px;
+}
+.cart_form table tr td input{
+    width: 40px;
+    height: 30px;
+    padding: 5px;
+}
+td .book_info a{
+    color: rgb(0, 167, 245);
+    font-size: 12px;
+}
+td .book_info img{
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+}
+/* css for Cart Page */
+
+  /* ********************CONTACT PAGE************* */
+  .contact-section{
+    background: url(bg.png) no-repeat center;
+    background-size: cover;
+    padding: 40px 0;
+  }
+  .contact-section h1{
+    text-align: center;
+    color: #ddd;
+  }
+  .border{
+    width: 100px;
+    height: 10px;
+    background: #131414;
+    margin: 40px auto;
+  }
+  .contact-section{
+    justify-content: center;
+    background-image: linear-gradient(45deg,
+      rgba(0, 0, 3, 0.1),
+      rgba(0, 0, 0, 0.5)), url(../images/c1.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  .contact-form{
+    max-width: 600px;
+    margin: auto;
+    padding: 0 10px;
+    overflow: hidden;
+  }
+  
+  .contact-form-text{
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 16px 0;
+    border: 0;
+    background: rgba(19, 18, 18, 0.9);
+    padding: 20px 40px;
+    outline: none;
+    color: #ddd;
+    font-size: 15px;
+    border-radius: 8px;
+    transition: 0.5s;
+  }
+  .contact-form-text:focus{
+    box-shadow: 0 0 10px 4px rgb(0, 167, 245);
+  }
+  textarea.contact-form-text{
+    resize: none;
+    height: 120px;
+  }
+  .contact-form-btn{
+    float: right;
+    border: 0;
+    background:rgb(15, 15, 15);
+    color: #fff;
+    padding: 12px 50px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.5s;
+  }
+  .contact-form-btn:hover{
+    background: rgb(0, 167, 245);
+  }
+  
+  /* ********************CONTACT PAGE************* */
+
+  /* Style The Dropdown Button */
+  header .nav .dropdown .dropbtn {
+  color: rgb(0, 167, 245);
+  padding: 8px 10px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+header .nav .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+header .nav .dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+header .nav .dropdown .dropbtn  .dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+header .nav .dropdown .dropbtn .dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+header .nav .dropdown:hover .dropdown-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* **********************************ORDER PAGE*********************************** */
+.placed-orders .title{
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  color:black;
+  font-size: 40px;
+}
+   .placed-orders .box-container{
+  max-width: 1200px;
+  margin:0 auto;
+  display:flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap:20px;
+}
+
+.placed-orders .box-container .empty{
+  flex:1;
+}
+
+.placed-orders .box-container .box{
+  flex:1 1 400px;
+  border-radius: .5rem;
+  padding:15px;
+  border:2px solid rgb(14, 152, 231);
+  background-color: white;
+  padding:10px 20px;
+}
+
+.placed-orders .box-container .box p{
+  padding:10px 0 0 0;
+  font-size: 20px;
+  color:gray;
+}
+
+.placed-orders .box-container .box p span{
+  color:black;
+}
+
+
+
+.message {
+  position: sticky;
+  top: 0;
+  margin: 0 auto;
+  width: 61%;
+  background-color: #fff;
+  padding: 6px 9px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  gap: 0px;
+  border: 2px solid rgb(68, 203, 236);
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+/* **********************************ORDER PAGE*********************************** */
