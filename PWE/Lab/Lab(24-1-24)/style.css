@@ -1,0 +1,85 @@
+.header{
+    width: 100%;
+    height: 40%;
+    background-color: red;
+    float: left;
+    margin-bottom: 3%;
+}
+.menu{
+    width: 18%;
+    height: 80%;
+    background-color: white;
+    float: left;
+    color: blue;
+}
+.body{
+    width: 80%;
+    /* height: 135%; */
+    background-color: white;
+    float: left;
+}
+.footer{
+    width: 100%;
+    height: 20%;
+    background-color: gray;
+    float: left;
+    color: white;
+    text-align: center;
+    padding-top: 30px;
+}
+.headerimage{
+    width: 100%;
+    height: 40%;
+    
+}
+ul{
+    list-style: none;
+}
+td{
+    text-align: center;
+}
+button{
+    border-radius: 12px;
+    border-color: white;
+}
+.footerImage{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.buttonColor{
+    color: white;
+    background-color: blue;
+    width: 20%;
+    height: 5%;
+}
+
+#dob{
+    width: 100%;
+    height: 5%;
+}
+
+/* th, td {
+    /* border: 1px solid #ddd; */
+    /* padding-left: 180;
+    text-align: right;
+    width: 50%;
+} */ 
+
+/* Add a class for the registration form td elements */
+/* .registration-form td {
+    width: 50%;
+} */
+/* th, td {
+    border: none;
+    padding: 5px;
+    text-align: right;
+    line-height: 1;
+    
+}
+.registration-form td {
+    width: 60%;
+    padding-left: 20px; 
+    text-align: right;
+     
+} */
