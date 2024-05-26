@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Products</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional CSS for Product Display */
+        .product {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .product p {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="logout.php">Logout</a></li>
+            <li><a href="view_products.html">View Product</a></li>
+            <li><a href="dashboard.html">Add Product</a></li>
+        </ul>
+    </nav>
+    <br><br><br>
+    <div class="container">
+        <h2>View Products</h2>
+        <div id="product-list">
+            <!-- Product list will be displayed here -->
+        </div>
+    </div>
+    <script>
+        // Fetch products using AJAX
+        window.onload = function() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("product-list").innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("GET", "view_products.php", true);
+            xhttp.send();
+        };
+    </script>
+</body>
+</html>
