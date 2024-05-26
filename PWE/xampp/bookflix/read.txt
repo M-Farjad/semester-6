@@ -1,0 +1,1800 @@
+
+
+<?php include 'config.php';
+
+session_start();
+
+$user_id = $_SESSION['user_id'];
+
+if (!isset($user_id)) {
+  header('location:login.php');
+}
+
+if (isset($_POST['checkout'])) {
+
+  $name = mysqli_real_escape_string($conn, $_POST['firstname']);
+  $number = $_POST['number'];
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
+  $method = mysqli_real_escape_string($conn, $_POST['method']);
+  $address = mysqli_real_escape_string($conn, $_POST['address']);
+  $city = mysqli_real_escape_string($conn, $_POST['city']);
+  $state = mysqli_real_escape_string($conn, $_POST['state']);
+  $country = mysqli_real_escape_string($conn, $_POST['country']);
+  $pincode = mysqli_real_escape_string($conn, $_POST['pincode']);
+  $full_address = mysqli_real_escape_string($conn, $_POST['address'] . ', ' . $_POST['city'] . ', ' . $_POST['state'] . ', ' . $_POST['country'] . ' - ' . $_POST['pincode']);
+  $placed_on = date('d-M-Y');
+
+  $cart_total = 0;
+  $cart_products[] = '';
+  if (empty($name)) {
+    $message[] = 'Please Enter Your Name';
+  } elseif (empty($email)) {
+    $message[] = 'Please Enter Email Id';
+  } elseif (empty($number)) {
+    $message[] = 'Please Enter Mobile Number';
+  } elseif (empty($address)) {
+    $message[] = 'Please Enter Address';
+  } elseif (empty($city)) {
+    $message[] = 'Please Enter city';
+  } elseif (empty($state)) {
+    $message[] = 'Please Enter state';
+  } elseif (empty($country)) {
+    $message[] = 'Please Enter country';
+  } elseif (empty($pincode)) {
+    $message[] = 'Please Enter your area pincode';
+  } else {
+
+    $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE user_id = '$user_id'") or die('query failed');
+    if (mysqli_num_rows($cart_query) > 0) {
+      while ($cart_item = mysqli_fetch_assoc($cart_query)) {
+        $cart_products[] = $cart_item['name'] . ' #' . $cart_item['book_id'] . ',(' . $cart_item['quantity'] . ') ';
+        $quantity=$cart_item['quantity'];
+        $unit_price=$cart_item['price'];
+        $cart_books = $cart_item['name'];
+        $sub_total = ($cart_item['price'] * $cart_item['quantity']);
+        $cart_total += $sub_total;
+      
+      }
+    }
+  
+
+  $total_books = implode(', ', $cart_products);
+
+  $order_query = mysqli_query($conn, "SELECT * FROM `confirm_order` WHERE name = '$name' AND number = '$number' AND email = '$email' AND payment_method = '$method' AND address = '$address' AND total_books = '$total_books' AND total_price = '$cart_total'") or die('query failed');
+
+
+    if (mysqli_num_rows($order_query) > 0) {
+      $message[] = 'order already placed!';
+    } 
+    else {
+      mysqli_query($conn, "INSERT INTO `confirm_order`(user_id, name, number, email, payment_method, address,total_books, total_price, order_date) VALUES('$user_id','$name', '$number', '$email','$method', '$full_address', '$total_books', '$cart_total', '$placed_on')") or die('query failed');
+      $select_book = mysqli_query($conn, "SELECT * FROM `confirm_order`") or die('query failed');
+        if(mysqli_num_rows($select_book) > 0){
+          $fetch_book = mysqli_fetch_assoc($select_book);
+          $orders_id= $fetch_book['order_id'];
+        }
+
+        $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE user_id = '$user_id'") or die('query failed');
+        if (mysqli_num_rows($cart_query) > 0) {
+          while ($cart_item = mysqli_fetch_assoc($cart_query)) {
+            $cart_products[] = $cart_item['name'] . ' #' . $cart_item['book_id'] . ',(' . $cart_item['quantity'] . ') ';
+            $quantity=$cart_item['quantity'];
+            $unit_price=$cart_item['price'];
+            $cart_books = $cart_item['name'];
+            $sub_total = ($cart_item['price'] * $cart_item['quantity']);
+            $cart_total += $sub_total;
+          
+            mysqli_query($conn, "INSERT INTO `orders`(user_id,order_id,address,city,state,country,pincode,book,quantity,unit_price,sub_total) VALUES('$user_id','$orders_id','$address','$city','$state','$country','$pincode','$cart_books','$quantity','$unit_price','$sub_total')") or die('query failed');
+          }
+        }
+
+      $message[] = 'order placed successfully!';
+      mysqli_query($conn, "DELETE FROM `cart` WHERE user_id = '$user_id'") or die('query failed');
+    }
+  }
+}
+
+?>
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial;
+      font-size: 17px;
+      padding: 8px;
+      overflow-x: hidden;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .row {
+      display: -ms-flexbox;
+      /* IE10 */
+      display: flex;
+      -ms-flex-wrap: wrap;
+      /* IE10 */
+      flex-wrap: wrap;
+      margin: 0 -16px;
+      padding: 30px;
+    }
+
+    .col-25 {
+      -ms-flex: 25%;
+      /* IE10 */
+      flex: 25%;
+    }
+
+    .col-50 {
+      -ms-flex: 50%;
+      /* IE10 */
+      flex: 50%;
+    }
+
+    .col-75 {
+      -ms-flex: 75%;
+      /* IE10 */
+      flex: 75%;
+    }
+
+    .col-25,
+    .col-50,
+    .col-75 {
+      padding: 0 16px;
+    }
+
+    .container {
+      background-color: #f2f2f2;
+      padding: 5px 20px 15px 20px;
+      border: 1px solid lightgrey;
+      border-radius: 3px;
+    }
+
+    input[type=text],
+    select {
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    label {
+      margin-bottom: 10px;
+      display: block;
+      color: brown;
+    }
+
+    .icon-container {
+      margin-bottom: 20px;
+      padding: 7px 0;
+      font-size: 24px;
+    }
+
+    .btn {
+      background-color: brown;
+      color: white;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      width: 100%;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 17px;
+    }
+
+    .btn:hover {
+      background-color: rgb(165, 42, 42);
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    a {
+      color: #2196F3;
+    }
+
+    hr {
+      border: 1px solid lightgrey;
+    }
+
+    span.price {
+      float: right;
+      color: grey;
+    }
+
+    @media (max-width: 800px) {
+      .row {
+        flex-direction: column-reverse;
+        padding: 0;
+      }
+
+      .col-25 {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://kit.fontawesome.com/493af71c35.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <?php include 'index_header.php'; ?>
+
+  <?php
+  if (isset($message)) {
+    foreach ($message as $message) {
+      echo '
+        <div class="message" id= "messages"><span>' . $message . '</span>
+        </div>
+        ';
+    }
+  }
+  ?>
+
+  <h2 style="text-align: center; margin-top:15px;">Place Your Order Here</h2>
+  <p style="text-align: center;">Just One Step away from getting your books</p>
+  <div class="row">
+    <div class="col-75">
+      <div class="container">
+        <form action="" method="POST">
+
+          <div class="row">
+            <div class="col-50">
+              <h3>Billing Address</h3>
+              <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+              <input type="text" id="fname" name="firstname" placeholder="Sudhanshu Gupta">
+              <label for="email"><i class="fa fa-envelope"></i> Email</label>
+              <input type="text" id="email" name="email" placeholder="demo@gmail.com">
+              <label for="email"><i class="fa fa-envelope"></i> Number</label>
+              <input type="text" id="email" name="number" placeholder="9567985415">
+              <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+              <input type="text" id="adr" name="address" placeholder="5 B-ward BMC Colony">
+              <label for="city"><i class="fa fa-institution"></i> City</label>
+              <input type="text" id="city" name="city" placeholder="Mumbai">
+              <label for="city"><i class="fa fa-institution"></i> State</label>
+              <input type="text" id="city" name="state" placeholder="Maharashtra">
+
+              <div style="padding: 0px;" class="row">
+                <div class="col-50">
+                  <label for="state">Country</label>
+                  <input type="text" id="state" name="country" placeholder="india">
+                </div>
+                <div class="col-50">
+                  <label for="zip">Pincode</label>
+                  <input type="text" id="zip" name="pincode" placeholder="212402">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-50">
+              <div class="col-25">
+                <div class="container">
+                  <h4>Books In Cart</h4>
+                  <?php
+                  $grand_total = 0;
+                  $select_cart = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
+                  if (mysqli_num_rows($select_cart) > 0) {
+                    while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
+                      $total_price = ($fetch_cart['price'] * $fetch_cart['quantity']);
+                      $grand_total += $total_price;
+                  ?>
+                      <p> <a href="book_details.php?details=<?php echo $fetch_cart['book_id']; ?>"><?php echo $fetch_cart['name']; ?></a><span class="price">(<?php echo '₹ ' . $fetch_cart['price'] . '/-' . ' x ' . $fetch_cart['quantity']; ?>)</span> </p>
+                  <?php
+                    }
+                  } else {
+                    echo '<p class="empty">your cart is empty</p>';
+                  }
+                  ?>
+
+                  <hr>
+                  <p>Grand total : <span class="price" style="color:black">₹ <b><?php echo $grand_total; ?>/-</b></span></p>
+                </div>
+              </div>
+              <div style="margin: 20px;">
+                <h3>Payment </h3>
+                <label for="fname">Accepted Payment Gateways</label>
+                <div class="icon-container">
+                  <i class="fa fa-cc-visa" style="color:navy;"></i>
+                  <i class="fa-brands fa-cc-amazon-pay"></i>
+                  <i class="fa-brands fa-google-pay" style="color:red;"></i>
+                  <i class="fa fa-cc-paypal" style="color:#3b7bbf;"></i>
+                </div>
+                <div class="inputBox">
+                  <label for="method">Choose Payment Method :</label>
+                  <select name="method" id="method">
+                    <option value="cash on delivery">Cash on delivery</option>
+                    <option value="Debit card">Debit card</option>
+                    <option value="Amazon Pay">Amazon Pay</option>
+                    <option value="Paypal">Paypal</option>
+                    <option value="Google Pay">Google Pay</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <label>
+            <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
+          </label>
+          <input type="submit" name="checkout" value="Continue to checkout" class="btn">
+        </form>
+      </div>
+    </div>
+  </div>
+  <?php include 'index_footer.php'; ?>
+  <script>
+    setTimeout(() => {
+      const box = document.getElementById('messages');
+
+      // 👇️ hides element (still takes up space on page)
+      box.style.display = 'none';
+    }, 5000);
+  </script>
+</body>
+
+</html>
+
+*****************************************************************************************************
+<?php
+// require_once 'dompdf/autoload.inc.php';
+session_start();
+
+$user_id = $_SESSION['user_id'];
+//  use Dompdf\Dompdf;
+//  $dompdf= new Dompdf;
+include'config.php';
+
+if(isset($_GET['order_id'])){
+  $order_id = $_GET['order_id'];
+  $get_order = mysqli_query($conn, "SELECT * FROM `confirm_order` WHERE order_id = '$order_id'") or die('query failed');
+  if (mysqli_num_rows($get_order) > 0){
+    $fetch_order = mysqli_fetch_assoc($get_order);
+    
+  }
+  $get_order = mysqli_query($conn, "SELECT * FROM `orders` WHERE user_id = '$user_id'") or die('query failed');
+  if (mysqli_num_rows($get_order) > 0){
+    $fetch_details = mysqli_fetch_assoc($get_order);
+    
+  }
+}
+?>
+
+// $html='
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+    <style>
+    body{
+        height: 3508px;
+        height: 2480px;
+    }
+    .invoice .section-top{
+        justify-content: center;
+        text-align: center;
+    }
+    .invoice .section-top .logo{
+        margin-left: 45%;
+    }
+    .logo a{
+        display: flex;
+        cursor: pointer;
+      }
+      
+      .logo a span {
+        color: brown;
+        font-weight: bold;
+        padding-right: 5px;
+        font-size: 30px;
+      }
+      .logo a .me {
+        color: black;
+        font-weight: 500;
+      }
+      .invoice .section-mid{
+        display: flex;
+        justify-content: space-around;
+      }
+      hr{
+        width: 85%;
+        color: rgba(0,0,0,0.12);
+      }
+
+.section-bott .colspan{
+    border-top: 1px solid rgba(0,0,0,0.12);
+}
+      </style>
+  </head>
+  <body>
+    <div class="invoice">
+      <div class="section-top">
+        <div class="logo">
+            <a><span>Read</span>
+                <span class="me">Me</span></a>
+        </div>
+        <div class="invoice-title">Invoice Details</div>
+      </div>
+      <div class="section-mid">
+        <div class="section-mid-one">
+            <h3>SHIPPING ADDRESS:</h3>
+            <div class="buyer-details">
+                <p class="buyer-name">To, <?php echo',   '.$fetch_order['name'].' ';?></p>
+                <p class="buyer-add">   <?php echo''.$fetch_details['address'].'';?></p>
+                <p class="buyer-area">  <?php echo'   '.$fetch_details['city'].'';?></p>
+                <p class="buyer-city">  <?php echo'  '.$fetch_details['state'].'';?></p>
+                <p class="buyer-STATE"> <?php echo''.$fetch_details['country'].'';?></p>
+                <p class="buyer-STATE"> <?php echo''.$fetch_details['pincode'].'';?></p>
+            </div>
+        </div>
+        <div><h3>SOLD BY:</h3>
+            <div class="buyer-details">
+                <p class="buyer-name">By, Read Me</p>
+                <p class="buyer-add">Mumbai</p>
+                <p class="buyer-area">Maharashtra</p>
+                <p class="buyer-city">India</p>
+                <p class="buyer-STATE">400065</p>
+            </div></div>
+        <div><h3>Details:</h3>
+            <div class="buyer-details">
+                <p class="buyer-name">Invoice Date: <?php echo'   '.$fetch_order['date'].' ';?></p>
+                <p class="buyer-add">Order ID: <?php echo'   '.$fetch_order['order_id'].' ';?></p>
+                <p class="buyer-area">Order Date: <?php echo'  '.$fetch_order['order_date'].' ';?></p>
+                <p class="buyer-city">From: Read Me </p>
+                <p class="buyer-STATE">Payment Method: <?php echo'   '.$fetch_order['payment_method'].' ';?></p>
+            </div></div>
+      </div>
+      <hr>
+      <div class="section-bott" style="padding: 0 86px;
+">
+        <table style="width: 100%;">
+          <thead>
+            <th>S.No.</th>
+            <th>BOOK NAME</th>
+            <th>QTY</th>
+            <th>UNIT PRICE</th>
+            <th>Total</th>
+          </thead>
+          <tbody>
+          <?php
+        $select_book = mysqli_query($conn, "SELECT * FROM `orders`WHERE user_id = '$user_id'") or die('query failed');
+        $s=1;
+        if(mysqli_num_rows($select_book) > 0){
+            while($fetch_book = mysqli_fetch_assoc($select_book)){
+      ?>
+            <tr>
+              <th><?php echo $s ?></th>
+              <th><?php echo' '.$fetch_book['book'].''?></th>
+              <th><?php echo' '.$fetch_book['quantity'].''?></th>
+              <th><?php echo' '.$fetch_book['unit_price'].''?></th>
+              <th><?php echo' '.$fetch_book['sub_total'].''?></th>
+            </tr>
+            <?php
+                   $s++; }
+                }
+              ?>
+            <tr>
+              <th></th>
+              <th colspan="2" class="colspan">NET TOTAL</th>
+              <th colspan="2"class="colspan"> '.$fetch_order['name'].'</th>
+              
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      <hr />
+      <div>
+        <div class="sign">READ ME</div>
+      </div>
+    </div>
+  </body>
+</html>
+// ';
+
+// $dompdf->loadHtml($html);
+// $dompdf->setPaper('A4', 'portrait');
+// $dompdf->render();
+// $dompdf->stream('invoice.pdf',['Attachment'=>0]);
+// ?>
+********************************************************************************************************
+<?php
+// require_once 'dompdf/autoload.inc.php';
+session_start();
+
+$user_id = $_SESSION['user_id'];
+//  use Dompdf\Dompdf;
+//  $dompdf= new Dompdf;
+include'config.php';
+
+if(isset($_GET['order_id'])){
+  $order_id = $_GET['order_id'];
+  $get_order = mysqli_query($conn, "SELECT * FROM `confirm_order` WHERE order_id = '$order_id'") or die('query failed');
+  if (mysqli_num_rows($get_order) > 0){
+    $fetch_order = mysqli_fetch_assoc($get_order);
+    
+  }
+  $get_order = mysqli_query($conn, "SELECT * FROM `orders` WHERE user_id = '$user_id'") or die('query failed');
+  if (mysqli_num_rows($get_order) > 0){
+    $fetch_details = mysqli_fetch_assoc($get_order);
+    
+  }
+}
+
+
+$html='<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+    <style>
+    body{
+        height: 3508px;
+        height: 2480px;
+    }
+    .invoice .section-top{
+        justify-content: center;
+        text-align: center;
+    }
+    .invoice .section-top .logo{
+        margin-left: 45%;
+    }
+    .logo a{
+        display: flex;
+        cursor: pointer;
+      }
+      
+      .logo a span {
+        color: brown;
+        font-weight: bold;
+        padding-right: 5px;
+        font-size: 30px;
+      }
+      .logo a .me {
+        color: black;
+        font-weight: 500;
+      }
+      .invoice .section-mid{
+        display: flex;
+        justify-content: space-around;
+      }
+      hr{
+        width: 85%;
+        color: rgba(0,0,0,0.12);
+      }
+
+.section-bott .colspan{
+    border-top: 1px solid rgba(0,0,0,0.12);
+}
+      </style>
+  </head>
+  <body>
+    <div class="invoice">
+      <div class="section-top">
+        <div class="logo">
+            <a><span>Read</span>
+                <span class="me">Me</span></a>
+        </div>
+        <div class="invoice-title">Invoice Details</div>
+      </div>
+      <div class="section-mid">
+        <div class="section-mid-one">
+            <h3>SHIPPING ADDRESS:</h3>
+            <div class="buyer-details">
+                <p class="buyer-name">To,   '.$fetch_order['name'].' </p>
+                <p class="buyer-add"> '.$fetch_details['address'].'</p>
+                <p class="buyer-area"> '.$fetch_details['city'].'</p>
+                <p class="buyer-city"> '.$fetch_details['state'].'</p>
+                <p class="buyer-STATE"> '.$fetch_details['country'].'</p>
+                <p class="buyer-STATE"> '.$fetch_details['pincode'].'</p>
+            </div>
+        </div>
+        <div><h3>SOLD BY:</h3>
+            <div class="buyer-details">
+                <p class="buyer-name">By, Read Me</p>
+                <p class="buyer-add">xasxs</p>
+                <p class="buyer-area">xwaxw</p>
+                <p class="buyer-city">xawxsssxzq</p>
+                <p class="buyer-STATE">xwasx</p>
+            </div></div>
+        <div><h3>Details:</h3>
+            <div class="buyer-details">
+                <p class="buyer-name">Invoice Date:  '.$fetch_order['date'].'</p>
+                <p class="buyer-add">Order ID: '.$fetch_order['order_id'].' </p>
+                <p class="buyer-area">Order Date: '.$fetch_order['order_date'].'</p>
+                <p class="buyer-city">From: Read Me</p>
+                <p class="buyer-STATE">Payment Method: '.$fetch_order['payment_method'].' </p>
+            </div></div>
+      </div>
+      <hr>
+      <div class="section-bott" style="padding: 0 86px;
+">
+        <table style="width: 100%;">
+          <thead>
+            <th>S.No.</th>
+            <th>BOOK NAME</th>
+            <th>QTY</th>
+            <th>UNIT PRICE</th>
+            <th>Total</th>
+          </thead>
+         
+            <tr>
+              <th></th>
+              <th colspan="2" class="colspan">NET TOTAL</th>
+              <th colspan="2"class="colspan"> '.$fetch_order['name'].'</th>
+              
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      <hr />
+      <div>
+        <div class="sign">READ ME</div>
+      </div>
+    </div>
+  </body>
+</html>';
+
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4', 'portrait');
+$dompdf->render();
+$dompdf->stream('invoice.pdf',['Attachment'=>0]);
+?>
+***************************************************************************************************
+<?php include 'config.php';
+
+session_start();
+
+$user_id = $_SESSION['user_id'];
+
+if (!isset($user_id)) {
+  header('location:login.php');
+}
+
+if (isset($_POST['checkout'])) {
+
+  $name = mysqli_real_escape_string($conn, $_POST['firstname']);
+  $number = $_POST['number'];
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
+  $method = mysqli_real_escape_string($conn, $_POST['method']);
+  $city = mysqli_real_escape_string($conn, $_POST['city']);
+  $state = mysqli_real_escape_string($conn, $_POST['state']);
+  $country = mysqli_real_escape_string($conn, $_POST['country']);
+  $pincode = mysqli_real_escape_string($conn, $_POST['pincode']);
+  $address = mysqli_real_escape_string($conn, $_POST['address'] . ', ' . $_POST['city'] . ', ' . $_POST['state'] . ', ' . $_POST['country'] . ' - ' . $_POST['pincode']);
+  $placed_on = date('d-M-Y');
+
+  $cart_total = 0;
+  $cart_products[] = '';
+  if (empty($name)) {
+    $message[] = 'Please Enter Your Name';
+  } elseif (empty($email)) {
+    $message[] = 'Please Enter Email Id';
+  } elseif (empty($number)) {
+    $message[] = 'Please Enter Mobile Number';
+  } elseif (empty($address)) {
+    $message[] = 'Please Enter Address';
+  } elseif (empty($city)) {
+    $message[] = 'Please Enter city';
+  } elseif (empty($state)) {
+    $message[] = 'Please Enter state';
+  } elseif (empty($country)) {
+    $message[] = 'Please Enter country';
+  } elseif (empty($pincode)) {
+    $message[] = 'Please Enter your area pincode';
+  } else {
+
+    $cart_query = mysqli_query($conn, "SELECT * FROM `cart` WHERE user_id = '$user_id'") or die('query failed');
+    if (mysqli_num_rows($cart_query) > 0) {
+      while ($cart_item = mysqli_fetch_assoc($cart_query)) {
+        $cart_products[] = $cart_item['name'] . ' #' . $cart_item['book_id'] . ',(' . $cart_item['quantity'] . ') ';
+        $sub_total = ($cart_item['price'] * $cart_item['quantity']);
+        $cart_total += $sub_total;
+      }
+    }
+  
+
+  $total_books = implode(', ', $cart_products);
+
+  $order_query = mysqli_query($conn, "SELECT * FROM `orders` WHERE name = '$name' AND number = '$number' AND email = '$email' AND payment_method = '$method' AND address = '$address' AND total_books = '$total_books' AND total_price = '$cart_total'") or die('query failed');
+
+  if ($cart_total == 0) {
+    $message[] = 'your cart is empty';
+  } else {
+    if (mysqli_num_rows($order_query) > 0) {
+      $message[] = 'order already placed!';
+    } else {
+      mysqli_query($conn, "INSERT INTO `orders`(user_id, name, number, email, payment_method, address, total_books, total_price, order_date) VALUES('$user_id','$name', '$number', '$email', '$method', '$address', '$total_books', '$cart_total', '$placed_on')") or die('query failed');
+      $message[] = 'order placed successfully!';
+      mysqli_query($conn, "DELETE FROM `cart` WHERE user_id = '$user_id'") or die('query failed');
+    }
+  }
+}}
+
+?>
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial;
+      font-size: 17px;
+      padding: 8px;
+      overflow-x: hidden;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .row {
+      display: -ms-flexbox;
+      /* IE10 */
+      display: flex;
+      -ms-flex-wrap: wrap;
+      /* IE10 */
+      flex-wrap: wrap;
+      margin: 0 -16px;
+      padding: 30px;
+    }
+
+    .col-25 {
+      -ms-flex: 25%;
+      /* IE10 */
+      flex: 25%;
+    }
+
+    .col-50 {
+      -ms-flex: 50%;
+      /* IE10 */
+      flex: 50%;
+    }
+
+    .col-75 {
+      -ms-flex: 75%;
+      /* IE10 */
+      flex: 75%;
+    }
+
+    .col-25,
+    .col-50,
+    .col-75 {
+      padding: 0 16px;
+    }
+
+    .container {
+      background-color: #f2f2f2;
+      padding: 5px 20px 15px 20px;
+      border: 1px solid lightgrey;
+      border-radius: 3px;
+    }
+
+    input[type=text],
+    select {
+      width: 100%;
+      margin-bottom: 20px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    label {
+      margin-bottom: 10px;
+      display: block;
+      color: brown;
+    }
+
+    .icon-container {
+      margin-bottom: 20px;
+      padding: 7px 0;
+      font-size: 24px;
+    }
+
+    .btn {
+      background-color: brown;
+      color: white;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      width: 100%;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 17px;
+    }
+
+    .btn:hover {
+      background-color: rgb(165, 42, 42);
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    a {
+      color: #2196F3;
+    }
+
+    hr {
+      border: 1px solid lightgrey;
+    }
+
+    span.price {
+      float: right;
+      color: grey;
+    }
+
+    @media (max-width: 800px) {
+      .row {
+        flex-direction: column-reverse;
+        padding: 0;
+      }
+
+      .col-25 {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://kit.fontawesome.com/493af71c35.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <?php include 'index_header.php'; ?>
+
+  <?php
+  if (isset($message)) {
+    foreach ($message as $message) {
+      echo '
+        <div class="message" id= "messages"><span>' . $message . '</span>
+        </div>
+        ';
+    }
+  }
+  ?>
+
+  <h2 style="text-align: center; margin-top:15px;">Place Your Order Here</h2>
+  <p style="text-align: center;">Just One Step away from getting your books</p>
+  <div class="row">
+    <div class="col-75">
+      <div class="container">
+        <form action="" method="POST">
+
+          <div class="row">
+            <div class="col-50">
+              <h3>Billing Address</h3>
+              <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+              <input type="text" id="fname" name="firstname" placeholder="Sudhanshu Gupta">
+              <label for="email"><i class="fa fa-envelope"></i> Email</label>
+              <input type="text" id="email" name="email" placeholder="demo@gmail.com">
+              <label for="email"><i class="fa fa-envelope"></i> Number</label>
+              <input type="text" id="email" name="number" placeholder="9567985415">
+              <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+              <input type="text" id="adr" name="address" placeholder="5 B-ward BMC Colony">
+              <label for="city"><i class="fa fa-institution"></i> City</label>
+              <input type="text" id="city" name="city" placeholder="Mumbai">
+              <label for="city"><i class="fa fa-institution"></i> State</label>
+              <input type="text" id="city" name="state" placeholder="Maharashtra">
+
+              <div style="padding: 0px;" class="row">
+                <div class="col-50">
+                  <label for="state">Country</label>
+                  <input type="text" id="state" name="country" placeholder="india">
+                </div>
+                <div class="col-50">
+                  <label for="zip">Pincode</label>
+                  <input type="text" id="zip" name="pincode" placeholder="212402">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-50">
+              <div class="col-25">
+                <div class="container">
+                  <h4>Books In Cart</h4>
+                  <?php
+                  $grand_total = 0;
+                  $select_cart = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
+                  if (mysqli_num_rows($select_cart) > 0) {
+                    while ($fetch_cart = mysqli_fetch_assoc($select_cart)) {
+                      $total_price = ($fetch_cart['price'] * $fetch_cart['quantity']);
+                      $grand_total += $total_price;
+                  ?>
+                      <p> <a href="book_details.php?details=<?php echo $fetch_cart['book_id']; ?>"><?php echo $fetch_cart['name']; ?></a><span class="price">(<?php echo '₹ ' . $fetch_cart['price'] . '/-' . ' x ' . $fetch_cart['quantity']; ?>)</span> </p>
+                  <?php
+                    }
+                  } else {
+                    echo '<p class="empty">your cart is empty</p>';
+                  }
+                  ?>
+
+                  <hr>
+                  <p>Grand total : <span class="price" style="color:black">₹ <b><?php echo $grand_total; ?>/-</b></span></p>
+                </div>
+              </div>
+              <div style="margin: 20px;">
+                <h3>Payment </h3>
+                <label for="fname">Accepted Payment Gateways</label>
+                <div class="icon-container">
+                  <i class="fa fa-cc-visa" style="color:navy;"></i>
+                  <i class="fa-brands fa-cc-amazon-pay"></i>
+                  <i class="fa-brands fa-google-pay" style="color:red;"></i>
+                  <i class="fa fa-cc-paypal" style="color:#3b7bbf;"></i>
+                </div>
+                <div class="inputBox">
+                  <label for="method">Choose Payment Method :</label>
+                  <select name="method" id="method">
+                    <option value="cash on delivery">Cash on delivery</option>
+                    <option value="Debit card">Debit card</option>
+                    <option value="Amazon Pay">Amazon Pay</option>
+                    <option value="Paypal">Paypal</option>
+                    <option value="Google Pay">Google Pay</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <label>
+            <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
+          </label>
+          <input type="submit" name="checkout" value="Continue to checkout" class="btn">
+        </form>
+      </div>
+    </div>
+  </div>
+  <?php include 'index_footer.php'; ?>
+  <script>
+    setTimeout(() => {
+      const box = document.getElementById('messages');
+
+      // 👇️ hides element (still takes up space on page)
+      box.style.display = 'none';
+    }, 5000);
+  </script>
+</body>
+
+</html>
+***************************************************************
+<!-- <header>
+        <div class="logo">
+            <a href="index.php"><span>Read</span>
+                <span class="me">Me</span></a>
+        </div>
+        <div class="nav">
+            <a href="index.php">Home</a>
+            <div class="dropdown">
+                <a class="dropbtn">Category🔻</a>
+                <div class="dropdown-content">
+                    <a href="#adventure">Adventure</a>
+                    <a href="#magical">Magic</a>
+                    <a href="#knowledge">Knowledge</a>
+                </div>
+            </div>
+            <a href="contact-us.php">Contact US</a>
+            <a href="cart.php">Cart</a>
+            <a href="orders.php">Orders</a>
+        </div>
+
+        <div class="user-box" style="display: flex;">
+            <a class="Btn" href="search_books.php"><img style="height:25px;" src="./images/search2.png" alt=""></a>
+            <?php if (isset($_SESSION['user_name'])) {
+                echo '<div class="user_info"><p>username: <span> ' . $_SESSION['user_name'] . '</span></p><p> email : <span>' . $_SESSION['user_email'] . '</span></p></div>';
+                //    echo '<p> email : <span>'.$_SESSION['user_email'].'</span></p>';
+                echo '<a href="logout.php" class="delete-btn">logout</a>';
+            } else {
+                echo '<a class="Btn" href="login.php">Login</a>';
+                echo '<a class="Btn" href="register.php">Register</a>';
+            } ?>
+
+            <!-- <p>email : <span><?php echo $_SESSION['user_email']; ?></span></p> -->
+            <!-- <a href="logout.php" class="delete-btn">logout</a> -->
+        </div>
+    </header>
+*****************************************************************************************
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/hello.css">
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.php"><span>Read</span>
+                <span class="me">Me</span></a>
+        </div>
+        <div class="nav">
+            <a href="index.php">Home</a>
+            <div class="dropdown">
+                <button class="dropbtn">Category🔻</button>
+                <div class="dropdown-content">
+                    <a href="#">Adventure</a>
+                    <a href="#">Magic</a>
+                    <a href="#">Knowledge</a>
+                </div>
+            </div>
+            <a href="contact-us.php">Contact US</a>
+            <a href="cart.php">Cart</a>
+            <a href="orders.php">Orders</a>
+        </div>
+        <div class="user-box" style="display: flex;">
+        <a class="Btn" href="search_books.php"><img style="height:25px;" src="./images/search2.png" alt=""></a>
+            <?php if(isset($_SESSION['user_name'])){
+               echo '<div class="user_info"><p>username: <span> '.$_SESSION['user_name'].'</span></p><p> email : <span>'.$_SESSION['user_email'].'</span></p></div>';
+            //    echo '<p> email : <span>'.$_SESSION['user_email'].'</span></p>';
+               echo '<a href="logout.php" class="delete-btn">logout</a>';
+            }
+            else{
+                echo'<a class="Btn" href="login.php">Login</a>';
+                echo'<a class="Btn" href="register.php">Register</a>';
+
+            }?>
+            
+            <!-- <p>email : <span><?php echo $_SESSION['user_email']; ?></span></p> -->
+            <!-- <a href="logout.php" class="delete-btn">logout</a> -->
+         </div>
+    </header>
+</body>
+
+</html>
+
+**********************************************************************************************
+
+<?php include'config.php';
+
+if(isset($_POST['checkout'])){
+
+    $name = mysqli_real_escape_string($conn, $_POST['firstname']);
+    $number = $_POST['number'];
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $method = mysqli_real_escape_string($conn, $_POST['method']);
+    $address = mysqli_real_escape_string($conn, $_POST['address'].', '. $_POST['city'].', '. $_POST['state'].', '. $_POST['country'].' - '. $_POST['pincode']);
+    $placed_on = date('d-M-Y');
+ 
+    $cart_total = 0;
+    $cart_products[] = '';
+ 
+    $cart_query = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
+    if(mysqli_num_rows($cart_query) > 0){
+       while($cart_item = mysqli_fetch_assoc($cart_query)){
+          $cart_products[] = $cart_item['name'].' #'.$cart_item['book_id'].',('.$cart_item['quantity'].') ';
+          $sub_total = ($cart_item['price'] * $cart_item['quantity']);
+          $cart_total += $sub_total;
+       }
+    }
+ 
+    $total_books = implode(', ',$cart_products);
+ 
+    $order_query = mysqli_query($conn, "SELECT * FROM `orders` WHERE name = '$name' AND number = '$number' AND email = '$email' AND payment_method = '$method' AND address = '$address' AND total_books = '$total_books' AND total_price = '$cart_total'") or die('query failed');
+ 
+    if($cart_total == 0){
+       $message[] = 'your cart is empty';
+    }else{
+       if(mysqli_num_rows($order_query) > 0){
+          $message[] = 'order already placed!'; 
+       }else{
+          mysqli_query($conn, "INSERT INTO `orders`( name, number, email, payment_method, address, total_books, total_price, order_date) VALUES('$name', '$number', '$email', '$method', '$address', '$total_books', '$cart_total', '$placed_on')") or die('query failed');
+          $message[] = 'order placed successfully!';
+        //   mysqli_query($conn, "DELETE FROM `cart` WHERE user_id = '$user_id'") or die('query failed');
+       }
+    }
+    
+ }
+
+?>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial;
+  font-size: 17px;
+  padding: 8px;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE10 */
+  flex-wrap: wrap;
+  margin: 0 -16px;
+  padding: 30px;
+}
+
+.col-25 {
+  -ms-flex: 25%; /* IE10 */
+  flex: 25%;
+}
+
+.col-50 {
+  -ms-flex: 50%; /* IE10 */
+  flex: 50%;
+}
+
+.col-75 {
+  -ms-flex: 75%; /* IE10 */
+  flex: 75%;
+}
+
+.col-25,
+.col-50,
+.col-75 {
+  padding: 0 16px;
+}
+
+.container {
+  background-color: #f2f2f2;
+  padding: 5px 20px 15px 20px;
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+}
+
+input[type=text], select {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+label {
+  margin-bottom: 10px;
+  display: block;
+  color: brown;
+}
+
+.icon-container {
+  margin-bottom: 20px;
+  padding: 7px 0;
+  font-size: 24px;
+}
+
+.btn {
+  background-color: brown;
+  color: white;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  width: 100%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.btn:hover {
+  background-color: #45a049;
+}
+
+a {
+  color: #2196F3;
+}
+
+hr {
+  border: 1px solid lightgrey;
+}
+
+span.price {
+  float: right;
+  color: grey;
+}
+
+@media (max-width: 800px) {
+  .row {
+    flex-direction: column-reverse;
+    padding: 0;
+  }
+  .col-25 {
+    margin-bottom: 20px;
+  }
+}
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://kit.fontawesome.com/493af71c35.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<?php include'index_header.php';?>
+<h2 style="text-align: center; margin-top:15px;">Checkout Form</h2>
+<p style="text-align: center;">Just One Step away from getting your books</p>
+<div class="row">
+  <div class="col-75">
+    <div class="container">
+      <form action="" method="POST">
+      
+        <div class="row">
+          <div class="col-50">
+            <h3>Billing Address</h3>
+            <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+            <input type="text" id="fname" name="firstname" placeholder="Sudhanshu Gupta">
+            <label for="email"><i class="fa fa-envelope"></i> Email</label>
+            <input type="text" id="email" name="email" placeholder="demo@gmail.com">
+            <label for="email"><i class="fa fa-envelope"></i> Number</label>
+            <input type="text" id="email" name="number" placeholder="9567985415">
+            <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+            <input type="text" id="adr" name="address" placeholder="5 B-ward BMC Colony">
+            <label for="city"><i class="fa fa-institution"></i> City</label>
+            <input type="text" id="city" name="city" placeholder="Mumbai">
+            <label for="city"><i class="fa fa-institution"></i> State</label>
+            <input type="text" id="city" name="state" placeholder="Maharashtra">
+
+            <div style="padding: 0px;" class="row">
+              <div class="col-50">
+                <label for="state">Country</label>
+                <input type="text" id="state" name="country" placeholder="india">
+              </div>
+              <div class="col-50">
+                <label for="zip">Pincode</label>
+                <input type="text" id="zip" name="pincode" placeholder="212402">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-50">
+          <div class="col-25">
+    <div class="container">
+    <h4>Books In Cart</h4>
+    <?php  
+      $grand_total = 0;
+      $select_cart = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
+      if(mysqli_num_rows($select_cart) > 0){
+         while($fetch_cart = mysqli_fetch_assoc($select_cart)){
+            $total_price = ($fetch_cart['price'] * $fetch_cart['quantity']);
+            $grand_total += $total_price;
+   ?>
+   <p> <a href="book_details.php?details=<?php echo $fetch_cart['book_id'];?>"><?php echo $fetch_cart['name']; ?></a><span class="price">(<?php echo '₹ '.$fetch_cart['price'].'/-'.' x '. $fetch_cart['quantity']; ?>)</span> </p>
+   <?php
+      }
+   }else{
+      echo '<p class="empty">your cart is empty</p>';
+   }
+   ?>
+
+      <hr>
+      <p>Grand total : <span class="price" style="color:black">₹ <b><?php echo $grand_total; ?>/-</b></span></p>
+    </div>
+  </div>
+  <div style="margin: 20px;">
+            <h3>Payment </h3>
+            <label for="fname">Accepted Payment Gateways</label>
+            <div class="icon-container">
+              <i class="fa fa-cc-visa" style="color:navy;"></i>
+              <i class="fa-brands fa-cc-amazon-pay"></i>
+              <i class="fa-brands fa-google-pay" style="color:red;"></i>
+              <i class="fa fa-cc-paypal" style="color:#3b7bbf;" ></i>
+            </div>
+            <div class="inputBox">
+            <label for="method">Choose Payment Method :</label>
+            <select name="method" id="method">
+               <option value="cash on delivery">Cash on delivery</option>
+               <option value="Debit card">Debit card</option>
+               <option value="Paypal">Paypal</option>
+               <option value="Google Pay">Google Pay</option>
+            </select>
+         </div>
+         </div>
+          </div>
+          
+        </div>
+        <label>
+          <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
+        </label>
+        <input type="submit" name="checkout" value="Continue to checkout" class="btn">
+      </form>
+    </div>
+  </div>
+</div>
+<?php include'index_footer.php'; ?>
+</body>
+</html>
+
+********************User details table*************************
+   <div>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>User Type</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                <?php
+                $select_users = $conn->query("SELECT Id,name,surname,email,password,user_type FROM users_info");
+                if ($select_users->num_rows  > 0) {
+
+                    while ($row = $select_users->fetch_assoc()) {
+                ?>
+                        <tr>
+                            <td><?php echo $row['Id']; ?></td>
+                            <td><?php echo $row['name'];
+                                echo '&nbsp;';
+                                echo $row['surname']; ?></td>
+                            <td><?php echo $row['email']; ?></td>
+                            <td><?php echo $row['password']; ?></td>
+                            <td><?php echo $row['user_type']; ?></td>
+                            <td class="buttons"><a href="users_detail.php?update_user=<?php echo $row['Id']; ?>">Update</a><a href="users_detail.php?delete_user=<?php echo $row['Id']; ?>" onclick="return confirm('delete this product?');">Delete</a></td><br>
+                        </tr>
+                <?php
+                    }
+                } else {
+                    echo '<p class="empty">There is no any user registered yet!</p>';
+                }
+                ?>
+            </tbody>
+        </table>
+
+    </div>
+
+******************************
+
+<div class="box">
+         <img class="books_images" src="added_books/<?php echo $fetch_book['image']; ?>" alt="">
+         <div class="name">Title: <?php echo $fetch_book['title']; ?></div>
+         <div class="name">Name: <?php echo $fetch_book['name']; ?></div>
+         <div class="price">Price: ₹ <?php echo $fetch_book['price']; ?>/-</div>
+         <a href="add_books.php?update=<?php echo $fetch_book['bid']; ?>" class="update_btn">update</a>
+         <a href="add_books.php?delete=<?php echo $fetch_book['bid']; ?>" class="delete_btn" onclick="return confirm('delete this product?');">delete</a>
+      </div>
+
+*******************************
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <?php
+    include 'admin_header.php';
+    ?>
+<?php
+    include 'config.php';
+      $select_users = $conn->query("SELECT Id,name,surname,email,password,user_type FROM users_info");
+      if ($select_users->num_rows  > 0) {
+        echo "<table><tr><th>ID</th><th>Name</th><th>Email</th><th>Password</th><th>User Type</th></tr>";
+
+        while($row = $select_users->fetch_assoc()) {
+            echo "<tr><td>" . $row["Id"]. "</td><td>" . $row["name"]. " " . $row["surname"]. "</td><td>" . $row["email"]. "</td><td>" . $row["password"]. "</td><td>" . $row["user_type"]. "</td></tr>";
+        }
+        echo "</table>";
+    } else {
+        echo "0 results";
+    }
+
+?>
+</body>
+</html>
+**********************************
+<?php
+include 'config.php';
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index_book.css">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet" />
+    <title>Read Me</title>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.php"><span>Read</span>
+                <span class="me">Me</span></a>
+        </div>
+        <div class="nav">
+            <a href="#">Home</a>
+            <a href="#">Category</a>
+            <a href="#">Books</a>
+        </div>
+        <div class="right">
+            <a class="Btn" href="login.php">Login</a>
+            <a class="Btn" href="register.php">Register</a>
+            <a class="Btn" href="">My Acoount</a>
+        </div>
+    </header>
+    <section id="home" class="text-gray-400 bg-white body-font">
+        <div class="banner"></div>
+        <div class="container px-5 mx-auto">
+            <h2 class="text-gray-400 m-8 font-extrabold text-4xl text-center border-t-2 text-red-800">
+                New Arrived
+            </h2>
+        </div>
+    </section>
+
+<section class="show-products" id="Home1">
+<div class="banner"></div>
+    <div class="box-container">
+
+   <?php
+      $select_book = mysqli_query($conn, "SELECT * FROM `book_info`") or die('query failed');
+      if(mysqli_num_rows($select_book) > 0){
+         while($fetch_book = mysqli_fetch_assoc($select_book)){
+   ?>
+   <div class="box">
+      <img class="books_images" src="added_books/<?php echo $fetch_book['image']; ?>" alt="">
+      <div class="name">Title: <?php echo $fetch_book['title']; ?></div>
+      <div class="name">Name: <?php echo $fetch_book['name']; ?></div>
+      <div class="price">Price: ₹ <?php echo $fetch_book['price']; ?>/-</div>
+      <a href="details_book.php?details=<?php echo $fetch_book['bid']; echo'-name=', $fetch_book['name']; ?>" class="update_btn">Know More</a>
+      <!-- <a href="cart.php=<?php echo $fetch_book['name']; ?>" class="update_btn">Add To Cart</a> -->
+   </div>
+   <?php
+      }
+   }else{
+      echo '<p class="empty">no products added yet!</p>';
+   }
+   ?>
+    </div>
+    </section>
+
+<section id="" class="text-gray-400 bg-white body-font">
+        <div class="container px-5 mx-auto">
+            <h2 class="text-gray-400 m-12 font-extrabold text-4xl text-center border-t-2 text-red-800">
+                Popular Books
+            </h2>
+            <div class="flex flex-wrap -m-4">
+                <div class="lg:w-1/4 border-2 border-black rounded-2xl md:w-1/2 p-4 w-full">
+                    <a class="block relative h-48 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="./images/hp.png" />
+                    </a>
+                    <div class="mt-4">
+                        <h3 class="text-black text-xs tracking-widest title-font mb-1">
+                            Harry Potter
+                        </h3>
+                        <h2 class="text-black title-font text-lg font-medium">
+                            The Chamber of Secrets
+                        </h2>
+                        <p class="mt-1">$16.00</p>
+                        <a href="details_book.php?details=18" class="update_btn">Know More</a>
+                    </div>
+                </div>
+                <div class="lg:w-1/4 border-2 border-black rounded-2xl md:w-1/2 p-4 w-full">
+                    <a class="block relative h-48 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="./images/pj.png" />
+                    </a>
+                    <div class="mt-4">
+                        <h3 class="text-black text-xs tracking-widest title-font mb-1">
+                            Percy Jackson
+                        </h3>
+                        <h2 class="text-black title-font text-lg font-medium">
+                            The Lightning Thief
+                        </h2>
+                        <p class="mt-1">$21.15</p>
+                    </div>
+                </div>
+                <div class="lg:w-1/4 border-2 border-black rounded-2xl md:w-1/2 p-4 w-full">
+                    <a class="block relative h-48 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="./images/got.png" />
+                    </a>
+                    <div class="mt-4">
+                        <h3 class="text-black text-xs tracking-widest title-font mb-1">
+                            GOT
+                        </h3>
+                        <h2 class="text-black title-font text-lg font-medium">Game Of Throns</h2>
+                        <p class="mt-1">$12.00</p>
+                    </div>
+                </div>
+                <div class="lg:w-1/4 border-2 border-black rounded-2xl md:w-1/2 p-4 w-full">
+                    <a class="block relative h-48 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="./images/tpb.png" />
+                    </a>
+                    <div class="mt-4">
+                        <h3 class="text-black text-xs tracking-widest title-font mb-1">
+                            William Goldman
+                        </h3>
+                        <h2 class="text-black title-font text-lg font-medium">
+                            The Princess Of Bride 
+                        </h2>
+                        <p class="mt-1">$18.40</p>
+                    </div>
+                </div>
+                <div class="lg:w-1/4 border-2 border-black rounded-2xl md:w-1/2 p-4 w-full">
+                    <a class="block relative h-48 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="./images/tetw.png" />
+                    </a>
+                    <div class="mt-4">
+                        <h3 class="text-black text-xs tracking-widest title-font mb-1">
+                            The Wheel Of Time
+                        </h3>
+                        <h2 class="text-black title-font text-lg font-medium">
+                            The Eye Of The world
+                        </h2>
+                        <p class="mt-1">$16.00</p>
+                    </div>
+                </div>
+                <div class="lg:w-1/4 border-2 border-black rounded-2xl md:w-1/2 p-4 w-full">
+                    <a class="block relative h-48 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="./images/tcm.png" />
+                    </a>
+                    <div class="mt-4">
+                        <h3 class="text-black text-xs tracking-widest title-font mb-1">
+                            Terry Pratchett
+                        </h3>
+                        <h2 class="text-black title-font text-lg font-medium">
+                            The Color Of Magic
+                        </h2>
+                        <p class="mt-1">$21.15</p>
+                    </div>
+                </div>
+                <div class="lg:w-1/4 border-2 border-black rounded-2xl md:w-1/2 p-4 w-full">
+                    <a class="block relative h-48 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="./images/tnw.png" />
+                    </a>
+                    <div class="mt-4">
+                        <h3 class="text-black text-xs tracking-widest title-font mb-1">
+                            Patrick Rothfuss
+                        </h3>
+                        <h2 class="text-black title-font text-lg font-medium">The Name Of The Wind</h2>
+                        <p class="mt-1">$12.00</p>
+                    </div>
+                </div>
+                <div class="lg:w-1/4 border-2 border-black rounded-2xl md:w-1/2 p-4 w-full">
+                    <a class="block relative h-48 rounded overflow-hidden">
+                        <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="./images/tcn.png" />
+                    </a>
+                    <div class="mt-4">
+                        <h3 class="text-black text-xs tracking-widest title-font mb-1">
+                            C.S. Lewis
+                        </h3>
+                        <h2 class="text-black title-font text-lg font-medium">
+                            The Chronicles Of Narnia
+                        </h2>
+                        <p class="mt-1">$18.40</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+</body>
+
+</html>
+
+
+
+
+******************************style.css***************************************
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap");
+
+* {
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  outline: none; border:none;
+}
+/* Header CSS */
+
+header {
+  background: #f2f1f1;
+  display: flex;
+  justify-content: space-around;
+  top: 0; left: 0; right: 0;
+  padding: 10px 7%;
+  align-items: center;
+  position: sticky;
+  z-index: 1000;
+  box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.1);;
+
+}
+
+.logo a{
+  display: flex;
+  cursor: pointer;
+}
+
+.logo a span {
+  color: brown;
+  font-weight: bold;
+  padding-right: 5px;
+  font-size: 30px;
+}
+.logo a .me {
+  color: black;
+  font-weight: 500;
+}
+
+.nav a {
+  padding: 0.5rem 1rem;
+  color: brown;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+.nav a:hover {
+  color: black;
+  border-bottom: 3px solid brown;
+}
+header .right .Btn {
+  color: brown;
+  margin: 0 15px;
+  padding: 5px 3px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+header .right .Btn:hover {
+  color: black;
+  border-bottom: 3px solid #a52a2a;
+}
+
+#home1 .banner{
+  background-image: url(../images/imgg.png);
+  background-position: center;
+  background-size: cover;
+  width: auto;
+  height: 144px;
+  margin: 1rem 0;
+  z-index: 1000;
+}
+/* Scrollbarr */
+::-webkit-scrollbar {
+  width: 6px;
+  
+}
+::-webkit-scrollbar-track {
+  background: #f2f1f1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(167, 70, 70);
+  width: 5px;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: black;
+}
+/* Scrollbarr */
+
+.contact-section{
+  background: url(bg.png) no-repeat center;
+  background-size: cover;
+  padding: 40px 0;
+}
+.contact-section h1{
+  text-align: center;
+  color: #ddd;
+}
+.border{
+  width: 100px;
+  height: 10px;
+  background: #34495e;
+  margin: 40px auto;
+}
+
+.contact-form{
+  max-width: 600px;
+  margin: auto;
+  padding: 0 10px;
+  overflow: hidden;
+}
+
+.contact-form-text{
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 16px 0;
+  border: 0;
+  background: #111;
+  padding: 20px 40px;
+  outline: none;
+  color: #ddd;
+  transition: 0.5s;
+}
+.contact-form-text:focus{
+  box-shadow: 0 0 10px 4px #34495e;
+}
+textarea.contact-form-text{
+  resize: none;
+  height: 120px;
+}
+.contact-form-btn{
+  float: right;
+  border: 0;
+  background: #34495e;
+  color: #fff;
+  padding: 12px 50px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+.contact-form-btn:hover{
+  background: #2980b9;
+}
+*********************dropdown*************
+
+  /* Style The Dropdown Button */
+  header .nav .dropdown .dropbtn {
+  color: brown;
+  padding: 8px 10px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+header .nav .dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+header .nav .dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+header .nav .dropdown .dropbtn  .dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+header .nav .dropdown .dropbtn .dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+header .nav .dropdown:hover .dropdown-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+/* header .nav .dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+} */
+
+*********************************************************
