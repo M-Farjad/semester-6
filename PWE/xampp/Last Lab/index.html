@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="login-form">
+        <h2>Login</h2>
+        <form action="login.php" method="post" onsubmit="return validateForm()">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+    <div id="admin-dashboard" style="display:none;">
+        <h2>Admin Dashboard</h2>
+        <button onclick="logout()">Logout</button>
+        <form id="product-form">
+            <label for="pname">Product Name:</label>
+            <input type="text" id="pname" name="pname"><br>
+            <label for="pprice">Price:</label>
+            <input type="number" id="pprice" name="pprice"><br>
+            <label for="pimage">Image URL:</label>
+            <input type="text" id="pimage" name="pimage"><br>
+            <button type="button" onclick="addProduct()">Add Product</button>
+        </form>
+        <div id="products">
+            <h3>Available Products</h3>
+            <!-- Products will be listed here -->
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
