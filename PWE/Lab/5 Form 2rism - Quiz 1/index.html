@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz 1</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <header>
+      <div id="first">
+        <div class="logo">
+          2rism
+          <span>
+            <img src="./Icons/icons/Vector.png" alt="" />
+          </span>
+        </div>
+        <div class="nav">
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Hostels</a></li>
+            <li><a href="#">Restaurants</a></li>
+            <li><a href="#">Tours</a></li>
+            <li><a href="#">Destinations</a></li>
+            <li><a href="#">Activities</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Login</a></li>
+          </ul>
+        </div>
+      </div>
+      <div id="second">
+        <h1>Discover the most engaging palces</h1>
+        <button>Discver on 3D globe</button>
+      </div>
+      <div id="third">
+        <div>
+          <div>
+            <img src="./Icons/icons/location.png" alt="" />
+            <div>
+              <span>Location</span>
+              <div>Explore nearby</div>
+            </div>
+          </div>
+          <div>
+            <img src="./Icons/icons/activities.png" alt="" />
+            <div>
+              <span>Activities</span>
+              <div>All Activities</div>
+            </div>
+          </div>
+          <div>
+            <img src="./Icons/icons/calendar.png" alt="" />
+            <div>
+              <span>When</span>
+              <div>Choose a Date</div>
+            </div>
+          </div>
+          <div>
+            <img src="./Icons/icons/guest.png" alt="" />
+            <div>
+              <span>Guests</span>
+              <div>I guest</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <h1>Trip plan</h1>
+      <form action="#">
+        <div>
+          <label for="name" class="first">Name:</label>
+          <input type="text" id="name" required />
+        </div>
+        <div>
+          <label for="address" class="first">Address:</label>
+          <input type="address" id="address" required />
+        </div>
+        <div>
+          <label for="town" class="first">Town/city:</label>
+          <input type="town" id="town" required />
+        </div>
+        <div>
+          <label for="Postcode" class="first">Postcode:</label>
+          <input type="Posycode" id="Postcode" required />
+        </div>
+        <div>
+          <span class="first">No. of days</span>
+          <div>
+            <span>
+              <input type="radio" name="days" value="two" />
+              <label for="">2 Days</label>
+            </span>
+            <span>
+              <input type="radio" name="days" value="four" />
+              <label for="">4 Days</label>
+            </span>
+            <span>
+              <input type="radio" name="days" value="seven" />
+              <label for="">7 Days</label>
+            </span>
+          </div>
+        </div>
+        <div>
+          <span class="first">Persons</span>
+          <div>
+            <span>
+              <input type="radio" name="persons" value="one" />
+              <label for="">One</label>
+            </span>
+            <span>
+              <input type="radio" name="persons" value="two" />
+              <label for="">Two</label>
+            </span>
+            <span>
+              <input type="radio" name="persons" value="four" />
+              <label for="">four</label>
+            </span>
+          </div>
+        </div>
+        <div>
+          <label for="" class="first">Departure time</label>
+          <input type="time" required />
+        </div>
+        <div>
+          <label class="first" for="">Any instructions</label>
+          <textarea required name="" id="" cols="25" rows="2"></textarea>
+        </div>
+        <div>
+          <span class="first">Service Type</span>
+          <div>
+            <span>
+              <input type="checkbox" />
+              <label for="">Economy</label>
+            </span>
+            <span>
+              <input type="checkbox" />
+              <label for="">Exactive</label>
+            </span>
+            <span>
+              <input type="checkbox" />
+              <label for="">Business</label>
+            </span>
+            <span>
+              <input type="checkbox" />
+              <label for="">Golden</label>
+            </span>
+          </div>
+        </div>
+        <input type="submit" value="Submit order" onclick="myFunction()" />
+      </form>
+    </main>
+    <footer>
+      <div>
+        <p>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Enim,
+          voluptatem.
+        </p>
+      </div>
+      <div>
+        <span class="bold">About</span>
+        <p>About us</p>
+        <p>Features</p>
+        <p>News</p>
+        <p>Menu</p>
+      </div>
+      <div>
+        <span class="bold">Company</span>
+        <p>About us</p>
+        <p>Features</p>
+        <p>News</p>
+        <p>Menu</p>
+      </div>
+      <div>
+        <span class="bold">Support</span>
+        <p>About us</p>
+        <p>Features</p>
+        <p>News</p>
+        <p>Menu</p>
+      </div>
+      <div></div>
+    </footer>
+  </body>
+</html>
